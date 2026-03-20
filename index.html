@@ -84,135 +84,37 @@ nav a:hover{opacity:.55;}
 .ti:hover{transform:scale(1.08);}
 .ti img{width:100%;height:100%;object-fit:contain;}
 
-<!-- ═══ CASE STUDIES SECTION ═══ -->
-<section id="work">
- 
-  <div class="section-heading">
-    <h2>The journey of Growth</h2>
-    <p>Each experience strengthens my perspective, shaping a process you can trust and understand.</p>
-  </div>
- 
-  <div class="cs-grid">
- 
-    <!-- ── Card 1: Hirenetix ── -->
-    <div class="cs-card">
-      <div class="cs-preview">
-        <img class="screenshot"
-             src="https://www.figma.com/api/mcp/asset/9d529aad-db89-442d-92b5-ccf1b8602af1"
-             alt="Hirenetix screenshot">
-      </div>
- 
-      <div class="cs-info">
-        <div class="cs-type">
-          <span class="cs-type-text">B2B</span>
-          <span class="cs-separator"></span>
-          <span class="cs-type-text">Web + Mobile</span>
-        </div>
-        <div class="cs-title">AI That Understands Talent</div>
-        <div class="cs-tags">
-          <span class="tag tag-blue">Conversational AI</span>
-          <span class="tag tag-blue">AI Chatbot</span>
-        </div>
-      </div>
- 
-      <hr class="cs-divider">
- 
-      <div class="cs-stats">
-        <div class="stat-block">
-          <span class="stat-val blue">25%</span>
-          <span class="stat-label">Reduction in time-to-hire</span>
-        </div>
-      </div>
- 
-      <div class="cs-arrow">
-        <img src="https://www.figma.com/api/mcp/asset/0d453efb-a76b-4f9b-9852-d42b62d00e71" alt="View case study">
-      </div>
-    </div>
- 
-    <!-- ── Card 2: Ekishwar ── -->
-    <div class="cs-card">
-      <div class="cs-preview">
-        <div class="eki-preview">
-          <img class="eki-phone"
-               src="https://www.figma.com/api/mcp/asset/4f716690-bd75-46df-9755-0ec0752f2ff7"
-               alt="Ekishwar app">
-          <div class="eki-info">
-            <img class="eki-logo"
-                 src="https://www.figma.com/api/mcp/asset/a6536a43-add2-40f5-b7e1-7e10c51f05e6"
-                 alt="Ekishwar logo">
-            <div class="eki-brand">Mann se Mandir Tak</div>
-            <div class="eki-sub">Digitally Uniting Faith, Tradition, and Temples</div>
-          </div>
-        </div>
-      </div>
- 
-      <div class="cs-info">
-        <div class="cs-type">
-          <span class="cs-type-text">B2C</span>
-          <span class="cs-separator"></span>
-          <span class="cs-type-text">Web + Mobile</span>
-        </div>
-        <div class="cs-title">A blend of timeless dharma and modern devotion</div>
-      </div>
- 
-      <hr class="cs-divider">
- 
-      <div class="cs-stats">
-        <div class="stat-block">
-          <span class="stat-val red">10k+</span>
-          <span class="stat-label">Downloads</span>
-        </div>
-        <div class="stat-block">
-          <span class="stat-val red">4000+</span>
-          <span class="stat-label">Users within 24hrs of launch</span>
-        </div>
-      </div>
- 
-      <div class="cs-arrow">
-        <img src="https://www.figma.com/api/mcp/asset/dc6a8723-72af-44b5-b901-0ba3eb2cd3f2" alt="View case study">
-      </div>
-    </div>
- 
-    <!-- ── Card 3: AI Travel Portal ── -->
-    <div class="cs-card">
-      <div class="cs-preview" style="background: #edf5fa; border-color: #ddeefa;">
-        <!-- placeholder until screenshot is added -->
-      </div>
- 
-      <div class="cs-info">
-        <div class="cs-type">
-          <span class="cs-type-text">B2B</span>
-          <span class="cs-separator"></span>
-          <span class="cs-type-text">B2C</span>
-          <span class="cs-separator"></span>
-          <span class="cs-type-text">Web + Mobile</span>
-        </div>
-        <div class="cs-title">A smart AI-powered travel portal</div>
-        <div class="cs-tags">
-          <span class="tag tag-pink">AI-powered journeys</span>
-          <span class="tag tag-pink">AI Chatbot</span>
-        </div>
-      </div>
- 
-      <hr class="cs-divider">
- 
-      <div class="cs-stats">
-        <div class="stat-block">
-          <span class="stat-val pink">25%</span>
-          <span class="stat-label">Reduction in time-to-hire</span>
-        </div>
-      </div>
- 
-      <div class="cs-arrow">
-        <img src="https://www.figma.com/api/mcp/asset/0d453efb-a76b-4f9b-9852-d42b62d00e71" alt="View case study">
-      </div>
-    </div>
- 
-  </div>
-</section>
- 
-</body>
-</html>
+/* CASE STUDIES */
+#work{padding:0 110px 80px;max-width:1200px;margin:0 auto;}
+.section-title{font-family:'Asul',serif;font-size:42px;font-weight:400;color:var(--navy);margin-bottom:8px;}
+.section-sub{font-size:17px;color:var(--navy);line-height:1.61;letter-spacing:.36px;margin-bottom:36px;}
+.cs-row{display:flex;gap:37px;flex-wrap:wrap;margin-bottom:40px;}
+.cs-card{width:480px;background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(214,200,215,.4);overflow:hidden;position:relative;flex-shrink:0;transition:transform .35s ease,box-shadow .35s ease;}
+.cs-card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(107,63,160,.15);}
+.cs-img{margin:12px 21px 0;border-radius:12px;height:200px;overflow:hidden;border:1px solid #e0e1ec;display:flex;align-items:center;justify-content:center;background:#f9f9fb;}
+.cs-img img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
+.eki-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:20px;padding:12px 16px;background:linear-gradient(135deg,#fde8e0,#f5ebe8);}
+.eki-phone{height:175px;width:auto;border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.15);object-fit:cover;}
+.eki-text{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.eki-logo{width:68px;height:68px;object-fit:contain;}
+.eki-name{font-weight:600;font-size:11px;color:#e94724;text-align:center;line-height:1.3;}
+.eki-sub{font-size:8.5px;color:#555;font-style:italic;text-align:center;}
+.cs-info{padding:12px 21px 0;}
+.cs-type{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.cs-type span{font-size:16px;color:#333;letter-spacing:-.32px;}
+.cs-dot{width:4px;height:4px;background:#bbb;border-radius:50%;flex-shrink:0;}
+.cs-name{font-weight:600;font-size:18px;color:#000311;line-height:1.3;margin-bottom:10px;}
+.cs-pills{display:flex;gap:10px;flex-wrap:wrap;}
+.pill{font-size:12px;font-weight:500;padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:-.24px;}
+.pill-b{background:#f5f6fa;color:var(--blue);}
+.pill-r{background:#fff3f5;color:var(--pink);}
+.cs-line{height:1px;background:#f0f0f0;margin:14px 21px 0;}
+.cs-stats{padding:10px 21px 56px;display:flex;gap:28px;}
+.cs-sv{font-weight:700;font-size:17px;color:var(--blue);}
+.cs-sv.red{color:var(--red);}
+.cs-sl{font-size:13px;font-style:italic;color:#333;margin-top:2px;}
+.cs-arrow{position:absolute;bottom:16px;right:20px;width:43px;height:43px;}
+.cs-arrow img{width:100%;height:100%;object-fit:contain;}
 
 /* CREATIVE HUB */
 #creative{position:relative;overflow:hidden;padding:0 0 80px;}
