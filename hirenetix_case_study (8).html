@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hirenetix — UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #f7f8fc;
+    --surface:   #ffffff;
+    --border:    #e0e3f0;
+    --accent:    #4859FF;
+    --accent2:   #2e3dd4;
+    --text:      #2a2d3e;
+    --muted:     #7a7f9a;
+    --fg-light:  #111320;
+    --red:       #d95f3b;
+    --teal:      #1da8a0;
+    --serif:     'Cormorant Garamond', Georgia, serif;
+    --sans:      'DM Sans', sans-serif;
+    --mono:      'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.3;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 1000; width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(247,248,252,0.90);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 900;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(72,89,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(72,89,255,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(72,89,255,0.08) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: pulse 6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 20px; opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(52px, 7vw, 100px);
+    font-weight: 300; line-height: 1.0;
+    letter-spacing: -0.01em;
+    color: var(--fg-light);
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--accent);
+  }
+  .hero-meta {
+    display: flex; gap: 48px; margin-top: 48px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .meta-item label {
+    display: block; font-family: var(--mono);
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .meta-item span { font-size: 13px; color: var(--text); }
+
+  .hero-scroll {
+    position: absolute; bottom: 80px; right: 48px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(var(--accent), transparent);
+    animation: scrollDrop 2s 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; width: 32px; height: 1px;
+    background: var(--accent);
+  }
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4.5vw, 64px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--fg-light); margin-bottom: 24px;
+  }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .section-body {
+    font-size: 16px; color: var(--text);
+    max-width: 680px; line-height: 1.85;
+  }
+  .section-body p + p { margin-top: 16px; }
+
+  /* divider */
+  .divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin: 0 48px; width: calc(100% - 96px);
+  }
+
+  /* ─── QUOTE ─── */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 20px 32px;
+    margin: 40px 0;
+    background: rgba(72,89,255,0.04);
+  }
+  .pull-quote p {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 300; font-style: italic;
+    color: var(--fg-light); line-height: 1.5;
+  }
+  .pull-quote cite {
+    display: block; margin-top: 12px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); font-style: normal;
+  }
+
+  /* ─── PROBLEM CARDS ─── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--surface);
+    padding: 32px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .problem-card:hover { background: #f0f2ff; }
+  .principle:hover { background: #f0f2ff; }
+  .problem-card .num {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .problem-card h3 {
+    font-family: var(--serif); font-size: 22px;
+    font-weight: 400; color: var(--fg-light);
+    margin-bottom: 12px;
+  }
+  .problem-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── STAT STRIP ─── */
+  .stat-strip {
+    display: flex; gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin: 48px 0;
+    overflow: hidden;
+  }
+  .stat-item {
+    flex: 1; padding: 40px 32px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--serif); font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300; color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); margin-top: 8px;
+  }
+
+  /* ─── PROCESS TIMELINE ─── */
+  .process-timeline {
+    position: relative;
+    margin-top: 64px;
+  }
+  .process-timeline::before {
+    content: '';
+    position: absolute;
+    left: 24px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(var(--accent), transparent);
+  }
+  .process-step {
+    display: flex; gap: 40px;
+    padding: 0 0 56px 0;
+    position: relative;
+  }
+  .step-dot {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent);
+    position: relative; z-index: 1;
+  }
+  .step-content { padding-top: 8px; }
+  .step-tag {
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .step-title {
+    font-family: var(--serif); font-size: 24px;
+    font-weight: 400; color: var(--fg-light);
+    margin-bottom: 12px;
+  }
+  .step-body { font-size: 14px; color: var(--muted); max-width: 560px; line-height: 1.8; }
+  .step-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+  }
+  .tag {
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid var(--border); color: var(--muted);
+    padding: 4px 10px; border-radius: 2px;
+  }
+
+  /* ─── INSIGHT GRID ─── */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px; margin-top: 48px;
+  }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+  .insight-card .icon {
+    font-size: 20px; margin-bottom: 12px;
+  }
+  .insight-card h4 {
+    font-family: var(--serif); font-size: 18px;
+    font-weight: 400; color: var(--fg-light); margin-bottom: 8px;
+  }
+  .insight-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── DESIGN PRINCIPLES ─── */
+  .principles {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid var(--border); margin-top: 48px;
+  }
+  .principle {
+    display: flex; align-items: flex-start; gap: 32px;
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .principle:last-child { border-bottom: none; }
+
+  .principle-num {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); flex-shrink: 0; padding-top: 3px;
+  }
+  .principle-text h4 {
+    font-family: var(--serif); font-size: 20px;
+    font-weight: 400; color: var(--fg-light); margin-bottom: 6px;
+  }
+  .principle-text p { font-size: 14px; color: var(--muted); }
+
+  /* ─── IMPACT METRICS ─── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .impact-card {
+    background: var(--bg);
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .impact-num {
+    font-family: var(--serif);
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 300; line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .impact-label {
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-top: 10px;
+  }
+  .impact-sub {
+    font-size: 12px; color: var(--text);
+    margin-top: 8px;
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table {
+    width: 100%; border-collapse: collapse;
+    margin-top: 40px; font-size: 14px;
+  }
+  .compare-table th {
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); padding: 12px 20px;
+    text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f0f2ff; }
+  .check { color: var(--teal); font-size: 16px; }
+  .cross { color: var(--red); font-size: 16px; }
+
+  /* ─── REFLECTION ─── */
+  .reflection-list {
+    list-style: none; margin-top: 40px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .reflection-list li {
+    display: flex; gap: 20px; align-items: flex-start;
+    padding: 24px; border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .reflection-list li .bullet {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); flex-shrink: 0; padding-top: 2px;
+  }
+  .reflection-list li .content h4 {
+    font-family: var(--serif); font-size: 18px;
+    font-weight: 400; color: var(--fg-light); margin-bottom: 6px;
+  }
+  .reflection-list li .content p { font-size: 13px; color: var(--muted); }
+
+  /* ─── CLOSING ─── */
+  .closing {
+    text-align: center;
+    padding: 120px 48px 160px;
+    position: relative; overflow: hidden;
+  }
+  .closing-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(72,89,255,0.06) 0%, transparent 70%);
+  }
+  .closing h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 300; color: var(--fg-light);
+    line-height: 1.1; max-width: 700px;
+    margin: 0 auto 32px; position: relative;
+  }
+  .closing h2 em { color: var(--accent); font-style: italic; }
+  .closing p {
+    color: var(--muted); max-width: 500px;
+    margin: 0 auto; font-size: 15px; position: relative;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer span {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ─── CHAPTER BREAK ─── */
+  .chapter-break {
+    border: none; border-top: 1px solid var(--border);
+    margin: 0; opacity: 0.6;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 0 24px 60px; }
+    .hero-meta { flex-direction: column; gap: 20px; }
+    .stat-strip { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .insight-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-logo">UX Case Study</div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#reflection">Reflection</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <p class="hero-eyebrow">UX Case Study · AI Recruitment Platform · 2024 — Ongoing</p>
+
+  <h1 class="hero-title">
+    Designing the brain behind<br /><em>smarter hiring</em>
+  </h1>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <label>Product</label>
+      <span>Hirenetix</span>
+    </div>
+    <div class="meta-item">
+      <label>My Role</label>
+      <span>Senior Product Designer</span>
+    </div>
+    <div class="meta-item">
+      <label>Duration</label>
+      <span>9 Months</span>
+    </div>
+    <div class="meta-item">
+      <label>Team</label>
+      <span>1 Designer · 4 Engineers · 1 PM</span>
+    </div>
+    <div class="meta-item">
+      <label>Platform</label>
+      <span>Web & Mobile (SaaS)</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</div>
+
+<!-- ─── OVERVIEW ─── -->
+<section id="overview">
+  <div class="section-label">00 — Overview</div>
+  <h2 class="section-heading">What is <em>Hirenetix?</em></h2>
+  <div class="section-body">
+    <p>Hirenetix is an AI-powered recruitment platform built for modern talent teams. It combines automated candidate screening, smart job matching, real-time analytics, and collaborative hiring workflows — all in one place.</p>
+    <p>My work focused on redesigning the end-to-end recruiter experience: from how they post a job and configure AI screening, to how hiring managers collaborate on decisions and candidates experience the process. This wasn't just a UI refresh — it was a full product rethink driven by user pain and market gaps.</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"Hiring is one of the most human decisions a company makes. Our job was to make the AI feel like a trusted advisor — not a black box."</p>
+    <cite>My north star framing at kickoff</cite>
+  </div>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── PROBLEM ─── -->
+<section id="problem">
+  <div class="section-label">01 — Problem</div>
+  <h2 class="section-heading">Hiring is<br /><em>broken by design</em></h2>
+  <div class="section-body">
+    <p>We started with a fundamental question: why do companies still struggle to hire well, even with an ocean of applicants? After 3 weeks of discovery, the answer wasn't a single feature request — it was a system failure.</p>
+  </div>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="num">01</div>
+      <h3>Recruiter Overload</h3>
+      <p>Recruiters were spending 60–70% of their time on manual screening, leaving little time for the relationship-building that actually closes candidates.</p>
+    </div>
+    <div class="problem-card">
+      <div class="num">02</div>
+      <h3>Inconsistent Evaluation</h3>
+      <p>Without structured criteria, two hiring managers reviewing the same candidate often reached completely different conclusions. Bias entered at every stage.</p>
+    </div>
+    <div class="problem-card">
+      <div class="num">03</div>
+      <h3>Poor Candidate Experience</h3>
+      <p>Candidates were ghosted for weeks, received zero feedback, and had no visibility into where they stood — damaging employer brand quietly.</p>
+    </div>
+    <div class="problem-card">
+      <div class="num">04</div>
+      <h3>Siloed Collaboration</h3>
+      <p>Hiring decisions lived in email threads, Slack messages, and spreadsheets — making it nearly impossible to align a cross-functional panel quickly.</p>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-item">
+      <div class="stat-num">23</div>
+      <div class="stat-label">days avg. time-to-hire among our target users</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">68%</div>
+      <div class="stat-label">recruiter time spent on manual tasks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3.1★</div>
+      <div class="stat-label">avg. candidate satisfaction score (pre-product)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">41%</div>
+      <div class="stat-label">of hires regretted within 6 months</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <p>These weren't niche complaints. They were universal. And that was our signal: if we got this right, Hirenetix could become the operating system for hiring.</p>
+  </div>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── PROCESS ─── -->
+<section id="process">
+  <div class="section-label">02 — Process</div>
+  <h2 class="section-heading">How we<br /><em>found our way</em></h2>
+  <div class="section-body">
+    <p>We ran a tight but structured design process across 9 months. I acted as the design lead — facilitating research, running workshops, and owning the design system end-to-end.</p>
+  </div>
+
+  <div class="process-timeline">
+    <div class="process-step">
+      <div class="step-dot">01</div>
+      <div class="step-content">
+        <div class="step-tag">Weeks 1–3 · Discovery</div>
+        <div class="step-title">Listening before designing</div>
+        <div class="step-body">
+          I led 18 user interviews across 3 user types — recruiters, hiring managers, and candidates. We ran a competitive teardown of 7 ATS tools and mapped the hiring journey from job creation to offer letter. One pattern was brutally clear: everyone felt like the system was working against them.
+        </div>
+        <div class="step-tags">
+          <span class="tag">User Interviews</span>
+          <span class="tag">Journey Mapping</span>
+          <span class="tag">Competitive Analysis</span>
+          <span class="tag">Stakeholder Workshops</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-dot">02</div>
+      <div class="step-content">
+        <div class="step-tag">Weeks 4–5 · Synthesis</div>
+        <div class="step-title">Finding the real jobs to be done</div>
+        <div class="step-body">
+          We clustered ~280 observations using affinity mapping and landed on 5 core design challenges. I wrote clear "How Might We" statements for each and aligned the team on which to tackle first. The PM and I then prioritized against business viability — we couldn't boil the ocean.
+        </div>
+        <div class="step-tags">
+          <span class="tag">Affinity Mapping</span>
+          <span class="tag">HMW Framing</span>
+          <span class="tag">Prioritization Matrix</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-dot">03</div>
+      <div class="step-content">
+        <div class="step-tag">Weeks 6–10 · Ideation</div>
+        <div class="step-title">Sketching at the speed of thought</div>
+        <div class="step-body">
+          We ran 3 design sprints — one per major workflow: AI screening setup, collaborative evaluation, and candidate portal. I facilitated Crazy-8s and dot-voting sessions with the team. We deliberately included an engineer in every sprint to catch feasibility issues early and avoid rework.
+        </div>
+        <div class="step-tags">
+          <span class="tag">Design Sprints</span>
+          <span class="tag">Crazy-8s</span>
+          <span class="tag">Lo-fi Wireframes</span>
+          <span class="tag">Concept Testing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-dot">04</div>
+      <div class="step-content">
+        <div class="step-tag">Weeks 11–22 · Design & Test</div>
+        <div class="step-title">Prototype, test, repeat — without mercy</div>
+        <div class="step-body">
+          We went through 4 rounds of usability testing — each round with 6 participants. We tested on Figma prototypes with realistic data. Key decisions like AI match score presentation and the panel scorecard format were significantly revised after testing. My rule: if 3 people are confused, it's a design problem — not a user problem.
+        </div>
+        <div class="step-tags">
+          <span class="tag">Figma Prototyping</span>
+          <span class="tag">Usability Testing</span>
+          <span class="tag">Moderated Sessions</span>
+          <span class="tag">Iteration</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-dot">05</div>
+      <div class="step-content">
+        <div class="step-tag">Weeks 23–36 · Build & Launch</div>
+        <div class="step-title">Staying in the room through delivery</div>
+        <div class="step-body">
+          I partnered closely with engineering during implementation — attending weekly build reviews, catching edge cases early, and maintaining a shared QA checklist. Post-launch, I embedded in customer success calls for the first month to watch real usage and capture feedback before the next cycle.
+        </div>
+        <div class="step-tags">
+          <span class="tag">Dev Handoff</span>
+          <span class="tag">QA Review</span>
+          <span class="tag">Launch Support</span>
+          <span class="tag">Post-launch Monitoring</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <p>Throughout the process, I maintained one non-negotiable: every major design decision needed to be backed by user evidence, not assumptions. This built a culture of justified design inside the team.</p>
+  </div>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── INSIGHTS ─── -->
+<section id="insights">
+  <div class="section-label">02b — Key Insights</div>
+  <h2 class="section-heading">What research<br /><em>actually taught us</em></h2>
+  <div class="section-body">
+    <p>A few insights that fundamentally shaped how we designed the solution:</p>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="icon">🧠</div>
+      <h4>AI needs to explain itself</h4>
+      <p>Recruiters trusted the AI match score only when they could see the reasoning. A number alone created anxiety. Transparency wasn't a nice-to-have — it was a trust prerequisite.</p>
+    </div>
+    <div class="insight-card">
+      <div class="icon">🔁</div>
+      <h4>Hiring managers live in email</h4>
+      <p>We couldn't pull hiring managers into a new tool cold. The platform had to meet them where they already were — with smart digest emails and one-click actions.</p>
+    </div>
+    <div class="insight-card">
+      <div class="icon">📍</div>
+      <h4>Candidates want progress, not promises</h4>
+      <p>Candidates didn't need elaborate communication — they needed a simple, honest status update. The moment we added a timeline tracker, NPS jumped significantly in concept testing.</p>
+    </div>
+    <div class="insight-card">
+      <div class="icon">⚡</div>
+      <h4>Speed is a feature</h4>
+      <p>Every second of friction between "I want to post a job" and "the job is live" increased drop-off. We cut the job creation flow from 14 steps to 6 — and adoption doubled in pilot.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── SOLUTION ─── -->
+<section id="solution">
+  <div class="section-label">03 — Solution</div>
+  <h2 class="section-heading">The product we<br /><em>built and why</em></h2>
+  <div class="section-body">
+    <p>The solution wasn't one feature. It was a coherent hiring experience built around three product pillars — each solving a distinct user pain, each reinforcing the other.</p>
+  </div>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-num">Pillar 01</div>
+      <div class="principle-text">
+        <h4>Intelligent Screening — with receipts</h4>
+        <p>The AI scoring engine ranked candidates by role-fit, but we wrapped it in a transparent explanation layer. Every score showed the top 3 factors, derived from the recruiter's own job brief. Recruiters could tune weights in real-time — making the AI feel collaborative, not dictatorial. This increased score acceptance from 34% to 81% in testing.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">Pillar 02</div>
+      <div class="principle-text">
+        <h4>Structured Evaluation — built for panels</h4>
+        <p>We designed a scoreboard system where each panelist independently scored candidates on a fixed rubric before seeing others' feedback. This eliminated groupthink and gave hiring managers confidence they were making evidence-based calls. Calibration sessions were embedded into the workflow, not bolted on as an afterthought.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">Pillar 03</div>
+      <div class="principle-text">
+        <h4>Candidate Portal — dignity in the process</h4>
+        <p>We gave every candidate a simple, branded status tracker — showing their stage, estimated timeline, and what to expect next. No platitudes. No form letters. Just honest, human communication. We also enabled automated but personalised rejection messages with optional feedback — something candidates had never expected and consistently praised.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>"The hardest design challenge wasn't the AI. It was designing trust between the human and the machine — at every touchpoint."</p>
+    <cite>Key learning from evaluation workflow testing</cite>
+  </div>
+  <!-- Comparison table -->
+  <h3 style="font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--fg-light); margin-top: 56px; margin-bottom: 4px;">Before vs. After</h3>
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 0;">Core workflow comparison across user types</p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Workflow</th>
+        <th>Before Hirenetix</th>
+        <th>After Hirenetix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Job Posting</td>
+        <td>14-step form across 3 tools</td>
+        <td>6-step wizard with AI-assisted JD generator</td>
+      </tr>
+      <tr>
+        <td>Candidate Screening</td>
+        <td>Manual CV review, 45–60 min/role</td>
+        <td>AI pre-screen with ranked shortlist in ~8 min</td>
+      </tr>
+      <tr>
+        <td>Panel Evaluation</td>
+        <td>Email threads, misaligned opinions</td>
+        <td>Structured scorecard, blind-first review</td>
+      </tr>
+      <tr>
+        <td>Candidate Communication</td>
+        <td>Ad hoc, often delayed or none</td>
+        <td>Automated, personalised, real-time status</td>
+      </tr>
+      <tr>
+        <td>Offer Decision</td>
+        <td>Verbal + spreadsheet, 4–6 days</td>
+        <td>In-platform decision log + digital offer, same day</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── IMPACT ─── -->
+<section id="impact">
+  <div class="section-label">04 — Impact</div>
+  <h2 class="section-heading">Numbers that<br /><em>actually moved</em></h2>
+  <div class="section-body">
+    <p>We tracked outcomes across a 6-month post-launch window with 12 early-access companies spanning 80–600 employees. Here's what the data showed:</p>
+  </div>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-num">40%</div>
+      <div class="impact-label">Reduction in Time-to-Hire</div>
+      <div class="impact-sub">From 23 days avg. to 13.8 days</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">3×</div>
+      <div class="impact-label">Faster Shortlisting</div>
+      <div class="impact-sub">AI screening cut manual review by 72%</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">4.6★</div>
+      <div class="impact-label">Candidate Satisfaction</div>
+      <div class="impact-sub">Up from 3.1 — highest in category</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">88%</div>
+      <div class="impact-label">Recruiter Adoption</div>
+      <div class="impact-sub">Without training or change management</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">2.1×</div>
+      <div class="impact-label">Panel Alignment Speed</div>
+      <div class="impact-sub">From first interview to decision</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">91%</div>
+      <div class="impact-label">Would Recommend</div>
+      <div class="impact-sub">NPS from beta cohort of 240 recruiters</div>
+    </div>
+  </div>
+
+  <div class="pull-quote" style="margin-top: 48px;">
+    <p>"The scoreboard changed how our leadership team talks about hiring. For the first time, decisions felt defensible."</p>
+    <cite>Head of Talent · Series B SaaS company · Beta customer</cite>
+  </div>
+</section>
+
+<hr class="chapter-break" />
+
+<!-- ─── REFLECTION ─── -->
+<section id="reflection">
+  <div class="section-label">05 — Reflection</div>
+  <h2 class="section-heading">What I'd do<br /><em>differently</em></h2>
+  <div class="section-body">
+    <p>No project lands perfectly. Looking back, there are things I'd approach differently — and things I'm glad we got right.</p>
+  </div>
+
+  <ul class="reflection-list">
+    <li>
+      <div class="bullet">→</div>
+      <div class="content">
+        <h4>I'd involve candidates in research sooner</h4>
+        <p>We spent the first 6 weeks almost exclusively focused on recruiters and hiring managers. The candidate perspective arrived late, which meant we redesigned the portal twice. Starting with all three user types in parallel would have saved us a full sprint.</p>
+      </div>
+    </li>
+    <li>
+      <div class="bullet">→</div>
+      <div class="content">
+        <h4>The AI explainability layer took too long to prioritize</h4>
+        <p>We initially treated the match score explanation as a "Phase 2" feature. Testing proved it was fundamental to trust. We course-corrected, but it cost us 3 weeks. Lesson: when you're designing AI, transparency is always core — never a bonus.</p>
+      </div>
+    </li>
+    <li>
+      <div class="bullet">→</div>
+      <div class="content">
+        <h4>I'm proud we kept the AI humble</h4>
+        <p>There was internal pressure to let the AI make hiring decisions, not just inform them. We pushed back hard and kept the human firmly in the decision seat. That call was critical — it's what made recruiters trust and adopt the product instead of feeling replaced by it.</p>
+      </div>
+    </li>
+    <li>
+      <div class="bullet">→</div>
+      <div class="content">
+        <h4>Design system investment paid off late, but it paid</h4>
+        <p>Building a proper component library in Figma felt slow in month 2. By month 6, it was our biggest velocity multiplier — engineers shipped screens in half the time, and design reviews took 20 minutes instead of 90.</p>
+      </div>
+    </li>
+    <li>
+      <div class="bullet">→</div>
+      <div class="content">
+        <h4>What I'm taking forward</h4>
+        <p>This project solidified something I've come to believe deeply: the best UX for AI products isn't about hiding the AI — it's about making the AI's reasoning visible. People don't fear automation. They fear being left out of the loop.</p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ─── CLOSING ─── -->
+<div class="closing">
+  <div class="closing-bg"></div>
+  <h2 class="section-heading" style="font-size: clamp(36px, 5vw, 64px); max-width: 700px; margin: 0 auto 32px;">Hirenetix is what happens when you design the <em>process</em>, not just the product</h2>
+  <p style="color: var(--muted); max-width: 540px; margin: 0 auto; font-size: 15px;">Smarter hiring isn't about replacing human judgment. It's about giving human judgment the right context, at the right moment, without friction. That's the design challenge I'm most proud of solving.</p>
+</div>
+
+<footer>
+  <span>Hirenetix · Senior Product Designer Case Study · 2024 – Ongoing</span>
+  <span>AI-Powered Recruitment Platform</span>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Section reveal on scroll
+  const sections = document.querySelectorAll('section');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+  sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
