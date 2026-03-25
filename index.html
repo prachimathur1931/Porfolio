@@ -371,39 +371,244 @@ footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.07);padding
 </section>
 
 <!-- CONTACT -->
-<section id="contact" aria-label="Contact">
-  <div class="ct-avail reveal"><span class="ct-dot"></span>Available for new opportunities</div>
-  <h2 class="ct-title reveal">Let's build something great</h2>
-  <p class="ct-sub reveal">Senior Product Designer · 4+ years · Jaipur, India</p>
-  <div class="ct-links reveal">
-    <a href="mailto:prachi.mathur1931@gmail.com" class="ct-btn wh">✉️&nbsp; prachi.mathur1931@gmail.com</a>
-    <a href="tel:+917568560825" class="ct-btn ol">📞&nbsp; +91 7568 560825</a>
-    <a href="#" class="ct-btn ol">💼&nbsp; LinkedIn</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Footer – Prachi Mathur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: #f5f0ee;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+ 
+    .footer-wrapper {
+      width: 1200px;
+      max-width: 100%;
+      position: relative;
+    }
+ 
+    /* Corner decorative images — right center */
+    .corner-img-container {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 160px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+ 
+    .corner-img-container img {
+      position: absolute;
+      top: -10.67%;
+      left: -35.77%;
+      width: 169.01%;
+      height: 121.95%;
+      object-fit: cover;
+    }
+ 
+    .corner-img-top {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 160px;
+      height: 110px;
+      pointer-events: none;
+      z-index: 3;
+    }
+ 
+    .corner-img-top img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+ 
+    /* Main footer card */
+    .footer-card {
+      width: 100%;
+      height: 384px;
+      border-radius: 52px 52px 0 0;
+      background:
+        linear-gradient(152deg, rgba(248,246,245,0.8) 55.7%, rgba(210,195,208,0.8) 93.7%),
+        linear-gradient(21deg, rgb(215,200,195) 21.7%, rgb(214,199,193) 1.3%, rgb(255,255,255) 55%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+ 
+    /* Text content */
+    .label {
+      position: absolute;
+      top: 54.5px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      color: #000;
+      text-align: center;
+      letter-spacing: 0;
+    }
+ 
+    .headline {
+      position: absolute;
+      top: 93.5px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      font-size: 40px;
+      text-align: center;
+      background: linear-gradient(to right, #732f06, #0f084b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+ 
+    .subtext {
+      position: absolute;
+      top: 159.5px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #0f084b;
+      text-align: center;
+      line-height: 30px;
+      letter-spacing: 0.18px;
+    }
+ 
+    .subtext em {
+      font-style: italic;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+ 
+    /* Social icons row */
+    .icons-row {
+      position: absolute;
+      top: 237.5px;
+      left: 493px;
+      display: flex;
+      gap: 18px;
+    }
+ 
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      overflow: hidden;
+    }
+ 
+    .icon-btn:hover {
+      transform: translateY(-3px);
+      opacity: 0.85;
+    }
+ 
+    .icon-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+ 
+    /* Divider */
+    .divider {
+      position: absolute;
+      top: 329.5px;
+      left: 100px;
+      width: 1000px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #c4a8c2 20%, #c4a8c2 80%, transparent);
+      opacity: 0.6;
+    }
+ 
+    /* Footer bar */
+    .footer-bar {
+      position: absolute;
+      top: 348.5px;
+      left: 0;
+      width: 100%;
+      padding: 0 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+    .footer-copy {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #0f084b;
+      letter-spacing: 0.56px;
+    }
+ 
+    .footer-tagline {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #8e5e8a;
+      letter-spacing: 0.56px;
+    }
+  </style>
+</head>
+<body>
+  <div class="footer-wrapper">
+    <!-- Decorative corner images -->
+    <div class="corner-img-container">
+      <img src="https://www.figma.com/api/mcp/asset/f8e40007-e35d-4f27-9282-9f4e55e3efee" alt="" />
+    </div>
+    <div class="corner-img-top">
+      <img src="https://www.figma.com/api/mcp/asset/ddcb7dc7-b987-461a-b4dd-a1aec7c836b5" alt="" />
+    </div>
+ 
+    <!-- Footer card -->
+    <div class="footer-card">
+      <p class="label">The End of the Page</p>
+ 
+      <h2 class="headline">Not the Conversation :)</h2>
+ 
+      <p class="subtext">
+        <em>If you made it this far, we should probably talk.</em><br />
+        Whether it's a project, opportunity, or just design talk - my inbox is waiting.
+      </p>
+ 
+      <!-- Social Icons -->
+      <div class="icons-row">
+        <a href="#" class="icon-btn" title="About Me">
+          <img src="https://www.figma.com/api/mcp/asset/4d36b34d-616e-4147-8913-caed449b503a" alt="About Me" />
+        </a>
+        <a href="#" class="icon-btn" title="Resume">
+          <img src="https://www.figma.com/api/mcp/asset/ffc08ef0-e0d5-4a9f-8afc-9ed094e44a06" alt="Resume" />
+        </a>
+        <a href="#" class="icon-btn" title="Behance">
+          <img src="https://www.figma.com/api/mcp/asset/010d8e8f-8fa4-4349-8786-f59f6aca9edf" alt="Behance" />
+        </a>
+        <a href="#" class="icon-btn" title="LinkedIn">
+          <img src="https://www.figma.com/api/mcp/asset/99aa526b-3f68-4c96-b52d-8b21126bf3dd" alt="LinkedIn" />
+        </a>
+      </div>
+ 
+      <!-- Divider -->
+      <div class="divider"></div>
+ 
+      <!-- Bottom bar -->
+      <div class="footer-bar">
+        <span class="footer-copy">© 2026 Prachi Mathur</span>
+        <span class="footer-tagline">Where every pixel is crafted with the same care as every coffee bean.</span>
+      </div>
+    </div>
   </div>
-</section>
-
-<footer>
-  <div class="fn">Prachi Mathur</div>
-  <div class="fc">© 2025 · Crafted with ♥ in Jaipur</div>
-</footer>
-
-</div>
-
-<script>
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => {
-    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('in'), i*70);
-  });
-}, {threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', ev => {
-    ev.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if(t) t.scrollIntoView({behavior:'smooth'});
-  });
-});
+</body>
+</html>
 </script>
 </body>
 </html>
